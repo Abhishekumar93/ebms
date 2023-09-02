@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body::-webkit-scrollbar {
+  width: 7px;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  /* outline: 1px solid slategrey; */
+  border-radius: 7px;
+}
+
+.gradient_text {
+  color: transparent;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(
+    to var(--imageDirection, right),
+    var(--fromTextColor, rgb(195 159 29)),
+    var(--toTextColor, rgb(0 184 255))
+  );
+}
+
+@layer components {
+  .form_input {
+    @apply mt-2 shadow-inner shadow-gray-300 focus-visible:outline-none h-8 w-full px-2.5 rounded dark:text-gray-700;
+  }
+  .active_button {
+    @apply bg-blue-500 text-white;
+  }
+  .inactive_button {
+    @apply bg-gray-300 pointer-events-none dark:text-slate-700;
+  }
+  .global_button {
+    @apply rounded-md px-3 py-1.5 font-semibold;
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, -200%, 0);
+  }
+}
+.flash_message_animation {
+  animation: fadeOutUp 1s ease-in;
+}
+
+@layer utilities {
+  .flash_message {
+    @apply fixed top-[4.5rem] right-1 max-w-[50%] px-3 py-1 text-sm rounded z-[60];
+  }
+
+  .loading_text_span {
+    @apply animate-moveLetters translate-x-0 relative inline-block opacity-0 drop-shadow-md;
+  }
+}
+
+.loading_text span:nth-child(n) {
+  animation-delay: n * 0.1s;
+}
