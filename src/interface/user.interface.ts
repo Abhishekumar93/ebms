@@ -21,3 +21,9 @@ export interface IUsersList {
   staff_id?: string;
   is_active?: boolean;
 }
+
+export interface IUserDetail extends IUsersList {
+  phone_number: string;
+  date_joined: Date;
+  last_login: Date;
+}

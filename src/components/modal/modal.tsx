@@ -133,7 +133,8 @@ const CustomModal: FC<IProps> = ({
                 required
               />
             </section>
-            {userDetails?.staff_id ? (
+            {userDetails?.staff_id ||
+            modalTitle.toLowerCase().includes("staff") ? (
               <section className="mt-5">
                 <label className="block text-lg">Staff Id</label>
                 <input

@@ -2,6 +2,7 @@ import axios from "axios";
 import Link from "next/link";
 import type { Metadata } from "next";
 import flashMessage from "@/components/flashmessage/flashMessage";
+import { getApi } from "@/utils/restApi.utils";
 
 export const metadata: Metadata = {
   title: "Activate Account | EBMS",
@@ -14,9 +15,7 @@ const ActivateAccount = async ({
 }) => {
   const verifyAndActivateAccount = async (uid: string, token: string) => {
     try {
-      let response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_DOMAIN}/portal-user/api/activate/${uid}/${token}/`
-      );
+      let response = await getApi(`activate/${uid}/${token}/`);
       return response.data["message"];
     } catch (error) {
       flashMessage.showErrorMessage("Something went wrong! Please try again.");
@@ -71,7 +70,7 @@ const ActivateAccount = async ({
   };
 
   return (
-    <div className="flex items-center justify-center h-full">
+    <div className="flex items-center justify-center min-h-[calc(100vh_-_4rem)]">
       <div className="text-center">
         {data !== undefined
           ? data === "activation_failed"

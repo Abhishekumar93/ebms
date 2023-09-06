@@ -55,15 +55,12 @@ class AuthApi {
       let response = await postApi("/api-token-auth/", user);
 
       let auth_token = response.data["token"];
-      let user_basic_data = await this.fetchUserBasicData(auth_token);
+      let result = await this.fetchUserBasicData(auth_token);
       addLocalStorageData("auth_token", auth_token);
-      let result: IUserDetailData = {
-        id: user_basic_data.id,
-        email: user.email,
-        name: user_basic_data.username,
-        role: user.staff_id ? USER_ROLE.STAFF : USER_ROLE.CONSUMER,
-      };
-      delayRedirect("/");
+      if (result) {
+        displaySuccessMessage("Successfully logged in!");
+        delayRedirect("/");
+      }
 
       return result;
     } catch (error: any) {
@@ -99,25 +96,28 @@ class AuthApi {
 
   async fetchUserBasicData(token: string) {
     try {
-      let response = await getApi("/portal-user/api/login/", {
+      let response = await getApi("login/", {
         Authorization: `Token ${token}`,
       });
-      displaySuccessMessage("Successfully logged in!");
-      return response.data;
+      let response_data = response.data;
+      let result: IUserDetailData = {
+        id: response_data.id,
+        email: response_data.email,
+        name: response_data.username,
+        role: response_data.user_role,
+      };
+      return result;
     } catch (error: any) {
       displayErrorFlashMessage();
+      return false;
     }
   }
 
   async updateUser(userData: IUsersList) {
     try {
-      let response = await putApi(
-        `/portal-user/api/user/update/${userData.id}/`,
-        userData,
-        {
-          Authorization: `Token ${getLocalStorageData("auth_token")}`,
-        }
-      );
+      let response = await putApi(`user/update/${userData.id}/`, userData, {
+        Authorization: `Token ${getLocalStorageData("auth_token")}`,
+      });
       let response_data = response.data;
       displaySuccessMessage(
         `User ${response_data["first_name"]} successfully updated!`
@@ -125,6 +125,7 @@ class AuthApi {
       return response_data;
     } catch (error: any) {
       displayErrorFlashMessage();
+      return false;
     }
   }
 
