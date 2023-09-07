@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import AuthPageSkeleton from "../authform/authPageSkeleton";
 import Image from "next/image";
-import { IUserLogion } from "@/interface/user.interface";
+import { IUserLogin } from "@/interface/user.interface";
 import { OverlayLoading } from "../overlayLoading/overlayLoading";
 import authApi from "@/utils/authApi.utils";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const [isLoginBtnActive, setIsLoginBtnActive] =
     React.useState<boolean>(false);
-  const [userDetails, setUserDetails] = React.useState<IUserLogion>({
+  const [userDetails, setUserDetails] = React.useState<IUserLogin>({
     email: "",
     password: "",
     staff_id: "",

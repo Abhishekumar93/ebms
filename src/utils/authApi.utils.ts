@@ -1,7 +1,7 @@
 "use client";
 
 import { USER_ROLE } from "@/constant/useRole/enum";
-import { IUserData, IUserLogion, IUsersList } from "@/interface/user.interface";
+import { IUserData, IUserLogin, IUsersList } from "@/interface/user.interface";
 import { delayRedirect } from "@/utils/delayRedirect.utils";
 import {
   displayErrorFlashMessage,
@@ -50,7 +50,7 @@ class AuthApi {
     }
   }
 
-  async getTokenKey(user: IUserLogion) {
+  async getTokenKey(user: IUserLogin) {
     try {
       let response = await postApi("/api-token-auth/", user);
 
@@ -125,6 +125,29 @@ class AuthApi {
       return response_data;
     } catch (error: any) {
       displayErrorFlashMessage();
+      return false;
+    }
+  }
+
+  async generateOtp(userData: { email: string }) {
+    try {
+      let response = await postApi("/portal-user/api/otp/", userData);
+      if (response.status === 200 && response.data["message"] === "otp_sent") {
+        displaySuccessMessage(
+          "We have sent an OTP on your email address. Please check your email"
+        );
+      }
+      return true;
+    } catch (error: any) {
+      let error_data = error.response.data;
+      let error_data_key = Object.keys(error_data)[0];
+      let error_message_data = [
+        {
+          errorKey: "message",
+          errorMessage: "Looks like you don't have an account on the platform.",
+        },
+      ];
+      displayErrorFlashMessage(error_data_key, error_message_data);
       return false;
     }
   }

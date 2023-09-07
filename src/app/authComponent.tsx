@@ -26,6 +26,11 @@ export const AuthComponent: React.FC<IChildrenProp> = ({
     return state.user;
   });
 
+  const isAuthPath =
+    pathname.startsWith("/login") ||
+    pathname === "/signup" ||
+    pathname.startsWith("/activate");
+
   useEffect(() => {
     let auth_token = getLocalStorageData("auth_token");
 
@@ -38,11 +43,6 @@ export const AuthComponent: React.FC<IChildrenProp> = ({
   }, []);
 
   useEffect(() => {
-    let isAuthPath =
-      pathname.startsWith("/login") ||
-      pathname === "/signup" ||
-      pathname.startsWith("/activate");
-
     if (userData.id) {
       if (isAuthPath) {
         setShowChildren(false);
@@ -79,7 +79,9 @@ export const AuthComponent: React.FC<IChildrenProp> = ({
   const removeLocalData = () => {
     dispatch(removeUserDetail({}));
     clearLocalStorage();
-    router.push("/login");
+    if (!isAuthPath) {
+      router.push("/login");
+    }
   };
 
   if (showChildren) {
