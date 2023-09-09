@@ -4,6 +4,7 @@ import { IUserDetail } from "@/interface/user.interface";
 import { getApi } from "@/utils/restApi.utils";
 import GoBack from "./goBack";
 import { handleHrefDecode } from "@/utils/hrefEncode.utils";
+import utcDateTime from "@/utils/utcDateTime.utils";
 
 const UserDetail = async ({ params }: { params: { id: string } }) => {
   const decodedId = handleHrefDecode(params.id);
@@ -63,16 +64,16 @@ const UserDetail = async ({ params }: { params: { id: string } }) => {
               </section>
               <section className="grid grid-cols-3 gap-4 mb-4 bg-gray-200 py-1 px-2 rounded bg-gradient-to-r from-cyan-300 to-blue-400 dark:from-cyan-700 dark:to-blue-700">
                 <p className="font-bold">Joined On</p>
-                <p className="col-span-2 pl-2">{`${new Date(
-                  data.date_joined
-                ).toLocaleString()}`}</p>
+                <p className="col-span-2 pl-2">
+                  {utcDateTime.localDateTime(`${data.date_joined}`)}
+                </p>
               </section>
               <section className="grid grid-cols-3 gap-4 mb-4 bg-gray-200 py-1 px-2 rounded bg-gradient-to-r from-cyan-300 to-blue-400 dark:from-cyan-700 dark:to-blue-700">
                 <p className="font-bold">Last Login</p>
                 <p className="col-span-2 pl-2">{`${
                   user_last_login.getFullYear() === 1970
                     ? "NA"
-                    : user_last_login.toLocaleString()
+                    : utcDateTime.localDateTime(`${data.last_login}`)
                 }`}</p>
               </section>
             </div>
