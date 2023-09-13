@@ -1,10 +1,10 @@
-export interface IUserLogion {
+export interface IUserLogin {
   email: string;
   password: string;
   staff_id?: string;
 }
 
-export interface IUserData extends IUserLogion {
+export interface IUserData extends IUserLogin {
   first_name: string;
   last_name: string;
   phone_number?: string;
@@ -20,4 +20,10 @@ export interface IUsersList {
   consumer_number?: string;
   staff_id?: string;
   is_active?: boolean;
+}
+
+export interface IUserDetail extends IUsersList {
+  phone_number: string;
+  date_joined: Date;
+  last_login: Date;
 }

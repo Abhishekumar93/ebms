@@ -2,12 +2,17 @@
 
 import { IChildrenProp } from "@/interface/childrenProps.interface";
 import { RootState } from "@/store";
-import { removeUserDetail } from "@/store/slices/userSlice";
-import { clearLocalStorage } from "@/utils/localStorage.utils";
+import { addUserDetail, removeUserDetail } from "@/store/slices/userSlice";
+import {
+  clearLocalStorage,
+  getLocalStorageData,
+} from "@/utils/localStorage.utils";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import Loading from "./loading";
+import authApi from "@/utils/authApi.utils";
 
 export const AuthComponent: React.FC<IChildrenProp> = ({
   children,
@@ -16,30 +21,72 @@ export const AuthComponent: React.FC<IChildrenProp> = ({
   const pathname = usePathname();
   const dispatch = useDispatch();
 
-  const isUserLoggedIn = useSelector((state: RootState) => {
-    return state.user.id;
+  const [showChildren, setShowChildren] = useState<boolean>(false);
+  const userData = useSelector((state: RootState) => {
+    return state.user;
   });
 
-  useEffect(() => {
-    let isAuthPath =
-      pathname === "/login" ||
-      pathname === "/signup" ||
-      pathname === "/login-using-otp" ||
-      pathname.startsWith("/activate");
+  const isAuthPath =
+    pathname.startsWith("/login") ||
+    pathname === "/signup" ||
+    pathname.startsWith("/activate");
 
-    if (isUserLoggedIn) {
+  useEffect(() => {
+    let auth_token = getLocalStorageData("auth_token");
+
+    if (auth_token) {
+      fetchUserDetail(auth_token);
+    } else {
+      removeLocalData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (userData.id) {
       if (isAuthPath) {
+        setShowChildren(false);
         router.push("/");
+      } else {
+        setShowChildren(true);
       }
     } else {
       if (!isAuthPath) {
+        setShowChildren(false);
         router.push("/login");
+      } else {
+        setShowChildren(true);
       }
-      dispatch(removeUserDetail({}));
-      clearLocalStorage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  return children;
+  const fetchUserDetail = async (token: string) => {
+    let result = await authApi.fetchUserBasicData(token);
+    if (result) {
+      let isDataSame =
+        result.id === userData.id &&
+        result.email === userData.email &&
+        result.name === userData.name &&
+        result.role === userData.role;
+      if (!isDataSame) {
+        dispatch(addUserDetail(result));
+      }
+    } else {
+      removeLocalData();
+    }
+  };
+  const removeLocalData = () => {
+    dispatch(removeUserDetail({}));
+    clearLocalStorage();
+    if (!isAuthPath) {
+      router.push("/login");
+    }
+  };
+
+  if (showChildren) {
+    return children;
+  } else {
+    return <Loading />;
+  }
 };

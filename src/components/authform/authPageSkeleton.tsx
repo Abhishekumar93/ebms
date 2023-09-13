@@ -43,11 +43,29 @@ const AuthPageSkeleton: React.FC<PropsWithChildren<IProps>> = ({
                 </Link>
               </p>
             ) : null}
-            {callingUrl === "login" || callingUrl === "staff-login" ? (
+            {callingUrl === "login" ||
+            callingUrl === "staff-login" ||
+            callingUrl === "otp-login" ? (
               <p className="mt-2 flex items-center">
                 Don&apos;t have an account?&nbsp;
                 <Link href="/signup" className="text-blue-500 underline">
                   Signup
+                </Link>
+              </p>
+            ) : null}
+
+            {callingUrl === "otp-login" ? (
+              <p className="mt-2 flex items-center">
+                Login as&nbsp;
+                <Link
+                  href="/login?role_type=staff"
+                  className="text-blue-500 underline"
+                >
+                  staff
+                </Link>
+                &nbsp; or&nbsp;
+                <Link href="/login" className="text-blue-500 underline">
+                  consumer
                 </Link>
               </p>
             ) : null}

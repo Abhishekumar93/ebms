@@ -26,7 +26,7 @@ export const postApi = async (
 
 export const getApi = async (apiUrl: string, headers: any = {}) => {
   let response = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_DOMAIN}${apiUrl}`,
+    `${process.env.NEXT_PUBLIC_API_DOMAIN}/portal-user/api/${apiUrl}`,
     {
       headers: {
         ...commonHeaderData,
@@ -44,7 +44,7 @@ export const putApi = async (
   headers: any = {}
 ) => {
   let response = await axios.put(
-    `${process.env.NEXT_PUBLIC_API_DOMAIN}${apiUrl}`,
+    `${process.env.NEXT_PUBLIC_API_DOMAIN}/portal-user/api/${apiUrl}`,
     body,
     {
       headers: {

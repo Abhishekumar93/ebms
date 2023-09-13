@@ -2,17 +2,27 @@
 
 import Loading from "@/app/loading";
 import { displayErrorFlashMessage } from "@/utils/displayFlashMessage.utils";
-import { getLocalStorageData } from "@/utils/localStorage.utils";
+import {
+  clearLocalStorage,
+  getLocalStorageData,
+} from "@/utils/localStorage.utils";
 import { getApi } from "@/utils/restApi.utils";
 import React, { useEffect, useState } from "react";
 import CheckIcon from "@/../public/svg/checkIcon";
 import CrossIcon from "@/../public/svg/crossIcon";
+import EditIcon from "@/../public/svg/editIcon";
 import { IUsersList } from "@/interface/user.interface";
 import CustomModal from "../modal/modal";
 import ReactPaginate from "react-paginate";
 import { IPaginatedUserList } from "@/interface/userApi.interface";
 import Filter from "../filter/filter";
 import { callbackDataType, filterFields } from "@/types/dataType.type";
+import Tooltip from "../tooltip/tooltip";
+import Link from "next/link";
+import { handleHrefEncode } from "@/utils/hrefEncode.utils";
+import { useDispatch } from "react-redux";
+import { removeUserDetail } from "@/store/slices/userSlice";
+import { useRouter } from "next/navigation";
 
 const PAGE_SIZE = 15;
 
@@ -23,6 +33,9 @@ interface IProps {
 }
 
 const UsersList: React.FC<IProps> = ({ userType }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const [isUsersListFetched, setIsUsersListFetched] = useState<boolean>(false);
   const [users, setUsers] = useState<IUsersList[]>([
     {
@@ -53,17 +66,26 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
   useEffect(() => {
     let auth_token = getLocalStorageData("auth_token");
     setIndexValue(PAGE_SIZE * currentPage);
+
     if (auth_token) {
       setIsUsersListFetched(false);
       getUserData(auth_token, userType === "Consumer" ? "1" : "0");
+    } else {
+      removeLocalData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, filterBy, userType]);
 
+  const removeLocalData = () => {
+    dispatch(removeUserDetail({}));
+    clearLocalStorage();
+    router.push("/login");
+  };
+
   const getUserData = async (token: string, role: string) => {
     try {
       let response = await getApi(
-        `/portal-user/api/list/user/?user_role=${role}&page=${
+        `list/user/?user_role=${role}&page=${
           currentPage + 1
         }&page_size=${PAGE_SIZE}${
           filterBy !== "all"
@@ -88,6 +110,9 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
         },
       ];
       displayErrorFlashMessage(error_data_key, error_message_data);
+      if (error.response.status === 401) {
+        removeLocalData();
+      }
     }
   };
 
@@ -152,7 +177,7 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
                 <th className="px-3 py-2 text-left border border-slate-300 w-1/12">
                   S. No.
                 </th>
-                <th className="px-3 py-2 text-left border border-slate-300 w-1/4">
+                <th className="px-3 py-2 text-left border border-slate-300 w-[28.3%]">
                   Name
                 </th>
                 <th className="px-3 py-2 text-left border border-slate-300">
@@ -161,8 +186,8 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
                 <th className="px-3 py-2 text-left border border-slate-300 w-1/5">
                   {userType === "Consumer" ? "Consumer Number" : "Staff Id"}
                 </th>
-                <th className="px-3 py-2 text-left border border-slate-300 w-[14%]">
-                  Active Status
+                <th className="px-3 py-2 text-left border border-slate-300 w-1/12">
+                  Status
                 </th>
               </tr>
             </thead>
@@ -177,7 +202,11 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
         );
       }
     } else {
-      return <Loading />;
+      return (
+        <div className="py-10">
+          <Loading />
+        </div>
+      );
     }
   };
 
@@ -188,22 +217,30 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
           <td className="px-3 py-2 border border-slate-300">
             {indexValue + index + 1}
           </td>
-          <td className="px-3 py-2 border border-slate-300">
-            <p
-              className="text-blue-500 underline cursor-pointer w-fit"
-              onClick={(e) => handleModalVisibility(e, user)}
-            >{`${user.first_name.trim()} ${user.last_name.trim()}`}</p>
+          <td className="px-3 py-2 border border-slate-300 flex items-center">
+            <div onClick={(e) => handleModalVisibility(e, user)}>
+              <EditIcon className="h-5 w-5 cursor-pointer fill-slate-700 dark:fill-slate-300" />
+            </div>
+            &ensp;
+            <nav>
+              <Link
+                href={`/user/${handleHrefEncode(user.email, user.id)}`}
+                className="text-blue-500 underline cursor-pointer w-fit"
+              >{`${user.first_name.trim()} ${user.last_name.trim()}`}</Link>
+            </nav>
           </td>
           <td className="px-3 py-2 border border-slate-300">{user.email}</td>
           <td className="px-3 py-2 border border-slate-300">
             {userType === "Consumer" ? user.consumer_number : user.staff_id}
           </td>
-          <td className="px-3 py-2 border border-slate-300 text-center">
-            {user.is_active ? (
-              <CheckIcon className="h-5 w-5 dark:fill-green-500 fill-green-600" />
-            ) : (
-              <CrossIcon className="h-5 w-5 dark:fill-red-500 fill-red-600" />
-            )}
+          <td className="px-3 py-2 border border-slate-300">
+            <Tooltip tooltipText={user.is_active ? "Active" : "Inactive"}>
+              {user.is_active ? (
+                <CheckIcon className="h-5 w-5 dark:fill-green-500 fill-green-600 hover:fill-green-600 mx-auto" />
+              ) : (
+                <CrossIcon className="h-5 w-5 dark:fill-red-500 fill-red-600 mx-auto" />
+              )}
+            </Tooltip>
           </td>
         </tr>
       );
@@ -214,7 +251,9 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
     <>
       {showModal && (
         <CustomModal
-          modalTitle={`Add ${userType === "Consumer" ? "Consumer" : "Staff"}`}
+          modalTitle={`${selectedUser.email ? "Edit" : "Add"} ${
+            userType === "Consumer" ? "Consumer" : "Staff"
+          }`}
           userData={selectedUser}
           setHideModal={hideModal}
           setModalCallbackData={modalCallbackData}
