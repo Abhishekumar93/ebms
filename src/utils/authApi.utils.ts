@@ -19,7 +19,7 @@ class AuthApi {
   async createUser(userData: IUserData, params?: string) {
     try {
       let response = await postApi(
-        `/portal-user/api/create/user/${params}`,
+        `/portal-user/api/create/user/${params !== undefined ? params : ""}`,
         userData
       );
 
