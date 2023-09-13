@@ -16,10 +16,6 @@ export const metadata: Metadata = {
     "This site is responsible for generating and checking the electricity bill of the user.",
 };
 
-export function reportWebVitals(metric: string) {
-  console.log(metric);
-}
-
 export default function RootLayout({ children }: IChildrenProp) {
   return (
     <html lang="en">
