@@ -23,8 +23,8 @@ const CustomModal: FC<IProps> = ({
     email: "",
     first_name: "",
     last_name: "",
-    consumer_number: "",
-    staff_id: "",
+    consumer_or_staff_id: "",
+    is_staff: false,
     is_active: false,
   });
 
@@ -40,12 +40,12 @@ const CustomModal: FC<IProps> = ({
   }, [userDetails]);
 
   const updateShowFormButtonValue = (data: IUsersList | IUserData) => {
-    let { email, first_name, last_name, consumer_number, staff_id } = data;
+    let { email, first_name, last_name, consumer_or_staff_id } = data;
     if (
       email.trim() !== "" &&
       first_name.trim() !== "" &&
       last_name.trim() !== "" &&
-      (staff_id?.trim() !== "" || consumer_number?.trim() !== "")
+      consumer_or_staff_id?.trim() !== ""
     ) {
       setShowFormButton(true);
     } else {
@@ -67,7 +67,6 @@ const CustomModal: FC<IProps> = ({
     if (!userDetails.id) {
       let data: IUserData = {
         ...userDetails,
-        is_staff: userDetails.staff_id ? true : false,
         password: generateRandomPassword(),
       };
       result = await authApi.createUser(data, "?type=add");
@@ -133,34 +132,23 @@ const CustomModal: FC<IProps> = ({
                 required
               />
             </section>
-            {userDetails?.staff_id ||
-            modalTitle.toLowerCase().includes("staff") ? (
-              <section className="mt-5">
+            <section className="mt-5">
+              {userDetails.is_staff ||
+              modalTitle.toLowerCase().includes("staff") ? (
                 <label className="block text-lg">Staff Id</label>
-                <input
-                  type="text"
-                  name="staff_id"
-                  id="staff_id"
-                  className="form_input"
-                  value={userDetails?.staff_id}
-                  onChange={handleChange}
-                  required
-                />
-              </section>
-            ) : (
-              <section className="mt-5">
+              ) : (
                 <label className="block text-lg">Consumer Number</label>
-                <input
-                  type="text"
-                  name="consumer_number"
-                  id="consumer_number"
-                  className="form_input"
-                  value={userDetails?.consumer_number}
-                  onChange={handleChange}
-                  required
-                />
-              </section>
-            )}
+              )}
+              <input
+                type="text"
+                name="consumer_or_staff_id"
+                id="consumer_or_staff_id"
+                className="form_input"
+                value={userDetails?.consumer_or_staff_id}
+                onChange={handleChange}
+                required
+              />
+            </section>
             {userData?.email && (
               <section className="mt-5 flex items-center">
                 <input

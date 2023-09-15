@@ -1,14 +1,13 @@
 export interface IUserLogin {
   email: string;
   password: string;
-  staff_id?: string;
+  consumer_or_staff_id?: string;
 }
 
 export interface IUserData extends IUserLogin {
   first_name: string;
   last_name: string;
   phone_number?: string;
-  consumer_number?: string;
   is_staff: boolean;
 }
 
@@ -17,8 +16,8 @@ export interface IUsersList {
   first_name: string;
   last_name: string;
   email: string;
-  consumer_number?: string;
-  staff_id?: string;
+  consumer_or_staff_id: string;
+  is_staff: boolean;
   is_active?: boolean;
 }
 

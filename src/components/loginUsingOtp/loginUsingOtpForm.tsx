@@ -18,18 +18,18 @@ const LoginUsingOtpForm = () => {
   const [userDetail, setUserDetail] = useState<IUserLogin>({
     email: "",
     password: "",
-    staff_id: "",
+    consumer_or_staff_id: "",
   });
   const [showOtp, setShowOtp] = useState<boolean>(false);
   const [isRedirectToDashboard, setIsRedirectToDashboard] =
     useState<boolean>(false);
 
   useEffect(() => {
-    let { email, password, staff_id } = userDetail;
+    let { email, password, consumer_or_staff_id } = userDetail;
     if (
       email.trim() !== "" &&
       (showOtpField ? password.trim() !== "" : !showOtpField) &&
-      ((isStaff && staff_id?.trim() !== "") || !isStaff)
+      ((isStaff && consumer_or_staff_id?.trim() !== "") || !isStaff)
     ) {
       setIsOtpBtnActive(true);
     } else {
@@ -46,7 +46,7 @@ const LoginUsingOtpForm = () => {
       if (result) setShowOtpField(true);
     } else {
       if (!isStaff) {
-        userData.staff_id = "";
+        userData.consumer_or_staff_id = "";
       }
       let result = await authApi.getTokenKey(userData);
 
@@ -127,10 +127,10 @@ const LoginUsingOtpForm = () => {
               <label className="block text-lg">Staff Id</label>
               <input
                 type="text"
-                name="staff_id"
-                id="staff_id"
+                name="consumer_or_staff_id"
+                id="consumer_or_staff_id"
                 className="form_input"
-                value={userDetail.staff_id}
+                value={userDetail.consumer_or_staff_id}
                 onChange={handleChange}
                 required
               />

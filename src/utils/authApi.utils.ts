@@ -40,9 +40,10 @@ class AuthApi {
           } login with valid credentials`,
         },
         {
-          errorKey: "consumer_number",
-          errorMessage:
-            "The given consumer number is attached with another user. Please check once again.",
+          errorKey: "consumer_or_staff_id",
+          errorMessage: `The given ${
+            userData.is_staff ? "staff id" : "consumer number"
+          } is attached with another user. Please check once again.`,
         },
       ];
       displayErrorFlashMessage(error_data_key, error_message_data);
@@ -73,7 +74,7 @@ class AuthApi {
         },
         {
           errorKey: "staff_account_not_found",
-          errorMessage: `We did not found any staff account with the given id ${user.staff_id}.`,
+          errorMessage: `We did not found any staff account with the given id ${user.consumer_or_staff_id}.`,
         },
         {
           errorKey: "consumer_account_not_found",
@@ -104,7 +105,7 @@ class AuthApi {
         id: response_data.id,
         email: response_data.email,
         name: response_data.username,
-        role: response_data.user_role,
+        role: response_data.is_staff ? "staff" : "consumer",
       };
       return result;
     } catch (error: any) {
