@@ -43,9 +43,9 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
       email: "",
       first_name: "",
       last_name: "",
-      consumer_number: "",
-      staff_id: "",
+      consumer_or_staff_id: "",
       is_active: false,
+      is_staff: false,
     },
   ]);
   const [selectedUser, setSelectedUser] = useState<IUsersList>({
@@ -53,9 +53,9 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
     email: "",
     first_name: "",
     last_name: "",
-    consumer_number: "",
-    staff_id: "",
+    consumer_or_staff_id: "",
     is_active: false,
+    is_staff: false,
   });
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -134,8 +134,7 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
       email: "",
       first_name: "",
       last_name: "",
-      consumer_number: "",
-      staff_id: "",
+      consumer_or_staff_id: "",
       is_active: false,
     };
     setShowModal((prevState) => !prevState);
@@ -231,7 +230,7 @@ const UsersList: React.FC<IProps> = ({ userType }) => {
           </td>
           <td className="px-3 py-2 border border-slate-300">{user.email}</td>
           <td className="px-3 py-2 border border-slate-300">
-            {userType === "Consumer" ? user.consumer_number : user.staff_id}
+            {user.consumer_or_staff_id}
           </td>
           <td className="px-3 py-2 border border-slate-300">
             <Tooltip tooltipText={user.is_active ? "Active" : "Inactive"}>

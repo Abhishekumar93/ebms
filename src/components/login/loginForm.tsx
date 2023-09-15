@@ -21,17 +21,17 @@ export default function LoginForm() {
   const [userDetails, setUserDetails] = React.useState<IUserLogin>({
     email: "",
     password: "",
-    staff_id: "",
+    consumer_or_staff_id: "",
   });
   const [isRedirectToDashboard, setIsRedirectToDashboard] =
     React.useState<boolean>(false);
 
   useEffect(() => {
-    let { email, password, staff_id } = userDetails;
+    let { email, password, consumer_or_staff_id } = userDetails;
     if (
       email.trim() !== "" &&
       password.trim() !== "" &&
-      ((isStaff && staff_id?.trim() !== "") || !isStaff)
+      ((isStaff && consumer_or_staff_id?.trim() !== "") || !isStaff)
     ) {
       setIsLoginBtnActive(true);
     } else {
@@ -55,7 +55,7 @@ export default function LoginForm() {
     setIsLoginBtnActive(false);
     let data = { ...userDetails };
     if (!isStaff) {
-      data.staff_id = "";
+      data.consumer_or_staff_id = "";
     }
     let result = await authApi.getTokenKey(data);
 
@@ -117,10 +117,10 @@ export default function LoginForm() {
               <label className="block text-lg">Staff Id</label>
               <input
                 type="text"
-                name="staff_id"
-                id="staff_id"
+                name="consumer_or_staff_id"
+                id="consumer_or_staff_id"
                 className="form_input"
-                value={userDetails.staff_id}
+                value={userDetails.consumer_or_staff_id}
                 onChange={handleChange}
                 required
               />

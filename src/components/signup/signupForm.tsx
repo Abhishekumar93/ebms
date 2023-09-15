@@ -16,28 +16,19 @@ export default function SignupForm() {
     password: "",
     first_name: "",
     last_name: "",
-    consumer_number: "",
+    consumer_or_staff_id: "",
     is_staff: false,
-    staff_id: "",
   });
 
   useEffect(() => {
-    let {
-      email,
-      password,
-      first_name,
-      last_name,
-      consumer_number,
-      is_staff,
-      staff_id,
-    } = userDetails;
+    let { email, password, first_name, last_name, consumer_or_staff_id } =
+      userDetails;
     if (
       email.trim() !== "" &&
       password.trim() !== "" &&
       first_name.trim() !== "" &&
       last_name.trim() !== "" &&
-      ((is_staff && staff_id?.trim() !== "") ||
-        (!is_staff && consumer_number?.trim() !== ""))
+      consumer_or_staff_id?.trim() !== ""
     ) {
       setIsSignupBtnActive(true);
     } else {
@@ -60,13 +51,7 @@ export default function SignupForm() {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSignupBtnActive(false);
-    let data = { ...userDetails };
-    if (data.is_staff) {
-      data.consumer_number = "";
-    } else {
-      data.staff_id = "";
-    }
-    let result = await authApi.createUser(data);
+    let result = await authApi.createUser(userDetails);
     if (result) setIsSignupBtnActive(true);
   };
 
@@ -133,33 +118,22 @@ export default function SignupForm() {
             />
           </div>
         </section>
-        {userDetails.is_staff ? (
-          <section className="mt-5">
+        <section className="mt-5">
+          {userDetails.is_staff ? (
             <label className="block text-lg">Staff Id</label>
-            <input
-              type="text"
-              name="staff_id"
-              id="staff_id"
-              className="form_input"
-              value={userDetails.staff_id}
-              onChange={handleChange}
-              required
-            />
-          </section>
-        ) : (
-          <section className="mt-5">
+          ) : (
             <label className="block text-lg">Consumer Number</label>
-            <input
-              type="text"
-              name="consumer_number"
-              id="consumer_number"
-              className="form_input"
-              value={userDetails.consumer_number}
-              onChange={handleChange}
-              required
-            />
-          </section>
-        )}
+          )}
+          <input
+            type="text"
+            name="consumer_or_staff_id"
+            id="consumer_or_staff_id"
+            className="form_input"
+            value={userDetails.consumer_or_staff_id}
+            onChange={handleChange}
+            required
+          />
+        </section>
 
         <section className="mt-5 flex items-center">
           <input

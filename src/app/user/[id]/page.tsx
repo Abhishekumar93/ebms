@@ -23,7 +23,6 @@ const UserDetail = async ({ params }: { params: { id: string } }) => {
 
   const displayUserDetail = () => {
     if (data) {
-      let user_consumer_number = data.consumer_number;
       let user_phone_number = data.phone_number;
       let user_last_login = new Date(data.last_login);
 
@@ -38,17 +37,12 @@ const UserDetail = async ({ params }: { params: { id: string } }) => {
                 <p className="col-span-2 pl-2">{data.email}</p>
               </section>
               <section className="grid grid-cols-3 gap-4 mb-4 bg-gray-200 py-1 px-2 rounded bg-gradient-to-r from-cyan-300 to-blue-400 dark:from-cyan-700 dark:to-blue-700">
-                {user_consumer_number ? (
-                  <>
-                    <p className="font-bold">Consumer Number</p>
-                    <p className="col-span-2 pl-2">{user_consumer_number}</p>
-                  </>
+                {!data.is_staff ? (
+                  <p className="font-bold">Consumer Number</p>
                 ) : (
-                  <>
-                    <p className="font-bold">Staff Id</p>
-                    <p className="col-span-2 pl-2">{data.staff_id}</p>
-                  </>
+                  <p className="font-bold">Staff Id</p>
                 )}
+                <p className="col-span-2 pl-2">{data.consumer_or_staff_id}</p>
               </section>
               <section className="grid grid-cols-3 gap-4 mb-4 bg-gray-200 py-1 px-2 rounded bg-gradient-to-r from-cyan-300 to-blue-400 dark:from-cyan-700 dark:to-blue-700">
                 <p className="font-bold">Phone Number</p>
