@@ -1,0 +1,14 @@
+// {
+//   "presets": ["@babel/preset-typescript", "next/babel"]
+// }
+
+{
+  "presets": [
+    ["@babel/preset-env", { "targets": { "node": "current" } }],
+    "@babel/preset-typescript",
+    ["@babel/preset-react", { "runtime": "automatic" }]
+  ],
+  "plugins": [
+    // Remove any plugins related to importAssertions or importAttributes
+  ]
+}

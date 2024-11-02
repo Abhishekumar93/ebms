@@ -7,6 +7,7 @@ import { AuthComponent } from "./authComponent";
 import Header from "@/components/header/header";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import Providers from "./provider";
+import ErrorBoundary from "./errorBoundary";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: IChildrenProp) {
       <body
         className={`${inter.className} bg-gray-100 dark:bg-gray-700 h-screen dark:text-slate-300 text-slate-700 relative`}
       >
+        {/* <ErrorBoundary> */}
         <Providers>
           <AuthComponent>
             <Header />
@@ -32,6 +34,7 @@ export default function RootLayout({ children }: IChildrenProp) {
             </main>
           </AuthComponent>
         </Providers>
+        {/* </ErrorBoundary> */}
       </body>
     </html>
   );

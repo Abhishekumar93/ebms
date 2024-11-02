@@ -5,15 +5,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import authApi from "@/utils/authApi.utils";
 import { useDispatch } from "react-redux";
-import { removeUserDetail } from "@/store/slices/userSlice";
+import { removeUserDetail, userIdSelector } from "@/store/slices/userSlice";
 import { useState } from "react";
 import { OverlayLoading } from "../overlayLoading/overlayLoading";
 
 export const Logout = () => {
   const dispatch = useDispatch();
-  const isUserLoggedIn = useSelector((state: RootState) => {
-    return state.user.id;
-  });
+  // const isUserLoggedIn = useSelector((state: RootState) => {
+  //   return state.user.id;
+  // });
+
+  const isUserLoggedIn = useSelector(userIdSelector);
 
   const [showLoading, setShowLoading] = useState<boolean>(false);
 

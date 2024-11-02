@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import LogoutIcon from "../../../public/svg/logoutIcon";
 import authApi from "@/utils/authApi.utils";
 import { useDispatch } from "react-redux";
-import { removeUserDetail } from "@/store/slices/userSlice";
+import { removeUserDetail, userDetailSelector } from "@/store/slices/userSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { handleHrefEncode } from "@/utils/hrefEncode.utils";
@@ -26,11 +26,11 @@ interface INavItems {
 export const Sidebar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const { id, email, role } = useSelector((state: RootState) => {
-    let userData = state.user;
-    return userData;
-  });
-
+  // const { id, email, role } = useSelector((state: RootState) => {
+  //   let userData = state.user;
+  //   return userData;
+  // });
+  const { id, email, role } = useSelector(userDetailSelector);
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [isAuthUrl, setIsAuthUrl] = useState<boolean>(false);
 

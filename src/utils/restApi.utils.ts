@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const commonHeaderData = {
-  Accept: "application/json",
+  "Accept": "application/json",
   "Content-Type": "application/json",
 };
 

@@ -1,18 +1,21 @@
 "use client";
 
 import { RootState } from "@/store";
+import { userNameSelector } from "@/store/slices/userSlice";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function Homepage() {
-  const userData = useSelector((state: RootState) => {
-    return state.user.name;
-  });
+  // const userData = useSelector((state: RootState) => {
+  //   return state.user.name;
+  // });
+
+  const userData = useSelector(userNameSelector);
 
   const [userName, setUserName] = useState<string>("");
 
   useEffect(() => {
-    if (userData) setUserName(userData.split(" ")[0]);
+    if (userData) setUserName(userData?.split(" ")[0]);
   }, [userData]);
 
   return (

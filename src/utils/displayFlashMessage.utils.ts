@@ -16,7 +16,7 @@ export const displayErrorFlashMessage = (
       : "";
   }
   flashMessage.showErrorMessage(
-    error_message ?? "Something went wrong! Please try again."
+    error_message || "Something went wrong! Please try again."
   );
 };
 

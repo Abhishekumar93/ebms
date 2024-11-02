@@ -1,6 +1,5 @@
 "use client";
 
-import { USER_ROLE } from "@/constant/useRole/enum";
 import { IUserData, IUserLogin, IUsersList } from "@/interface/user.interface";
 import { delayRedirect } from "@/utils/delayRedirect.utils";
 import {
@@ -35,15 +34,13 @@ class AuthApi {
       let error_message_data = [
         {
           errorKey: "message",
-          errorMessage: `An account with the given email id already exists in our system. ${
-            params ? "Ask the user to" : "Please"
-          } login with valid credentials`,
+          errorMessage: `An account with the given email id already exists in our system. ${params ? "Ask the user to" : "Please"
+            } login with valid credentials`,
         },
         {
           errorKey: "consumer_or_staff_id",
-          errorMessage: `The given ${
-            userData.is_staff ? "staff id" : "consumer number"
-          } is attached with another user. Please check once again.`,
+          errorMessage: `The given ${userData.is_staff ? "staff id" : "consumer number"
+            } is attached with another user. Please check once again.`,
         },
       ];
       displayErrorFlashMessage(error_data_key, error_message_data);

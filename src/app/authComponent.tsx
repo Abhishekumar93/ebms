@@ -2,7 +2,11 @@
 
 import { IChildrenProp } from "@/interface/childrenProps.interface";
 import { RootState } from "@/store";
-import { addUserDetail, removeUserDetail } from "@/store/slices/userSlice";
+import {
+  addUserDetail,
+  removeUserDetail,
+  userDetailSelector,
+} from "@/store/slices/userSlice";
 import {
   clearLocalStorage,
   getLocalStorageData,
@@ -22,9 +26,11 @@ export const AuthComponent: React.FC<IChildrenProp> = ({
   const dispatch = useDispatch();
 
   const [showChildren, setShowChildren] = useState<boolean>(false);
-  const userData = useSelector((state: RootState) => {
-    return state.user;
-  });
+  // const userData = useSelector((state: RootState) => {
+  //   return state.user;
+  // });
+
+  const userData = useSelector(userDetailSelector);
 
   const isAuthPath =
     pathname.startsWith("/login") ||

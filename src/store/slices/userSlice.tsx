@@ -1,5 +1,5 @@
 import { IUserDetailData } from "@/interface/reduxStore.interface";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: IUserDetailData = {
   id: 0,
@@ -12,7 +12,7 @@ const userSlice = createSlice({
   name: "userDetail",
   initialState,
   reducers: {
-    addUserDetail: (state, action) => {
+    addUserDetail: (state, action: PayloadAction<IUserDetailData>) => {
       return action.payload;
     },
     removeUserDetail: (state, action) => {
@@ -22,4 +22,21 @@ const userSlice = createSlice({
 });
 
 export const { addUserDetail, removeUserDetail } = userSlice.actions;
-export default userSlice.reducer;
+export default userSlice;
+
+export const userSelector = (state: {userDetail: IUserDetailData}) => state.userDetail;
+
+export const userDetailSelector = createSelector(
+  [userSelector],
+  (userDetails) => userDetails
+);
+
+export const userNameSelector = createSelector(
+  [userSelector],
+  (userDetails) => userDetails.name
+);
+
+export const userIdSelector = createSelector(
+  [userSelector],
+  (userDetails) => userDetails.id
+);

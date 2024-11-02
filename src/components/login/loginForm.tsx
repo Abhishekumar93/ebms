@@ -14,6 +14,7 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const isStaff = searchParams.get("role_type");
+  // const isStaff = "staff";
 
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const [isLoginBtnActive, setIsLoginBtnActive] =
