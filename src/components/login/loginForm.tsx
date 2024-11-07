@@ -1,38 +1,36 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
-import AuthPageSkeleton from "../authform/authPageSkeleton";
-import Image from "next/image";
-import { IUserLogin } from "@/interface/user.interface";
-import { OverlayLoading } from "../overlayLoading/overlayLoading";
-import authApi from "@/utils/authApi.utils";
-import { useDispatch } from "react-redux";
-import { addUserDetail } from "@/store/slices/userSlice";
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
+import AuthPageSkeleton from '../authform/authPageSkeleton';
+import Image from 'next/image';
+import { IUserLogin } from '@/interface/user.interface';
+import { OverlayLoading } from '../overlayLoading/overlayLoading';
+import authApi from '@/utils/authApi.utils';
+import { useDispatch } from 'react-redux';
+import { addUserDetail } from '@/store/slices/userSlice';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
-  const isStaff = searchParams.get("role_type");
+  const isStaff = searchParams.get('role_type');
   // const isStaff = "staff";
 
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
-  const [isLoginBtnActive, setIsLoginBtnActive] =
-    React.useState<boolean>(false);
+  const [isLoginBtnActive, setIsLoginBtnActive] = React.useState<boolean>(false);
   const [userDetails, setUserDetails] = React.useState<IUserLogin>({
-    email: "",
-    password: "",
-    consumer_or_staff_id: "",
+    email: '',
+    password: '',
+    consumer_or_staff_id: '',
   });
-  const [isRedirectToDashboard, setIsRedirectToDashboard] =
-    React.useState<boolean>(false);
+  const [isRedirectToDashboard, setIsRedirectToDashboard] = React.useState<boolean>(false);
 
   useEffect(() => {
     let { email, password, consumer_or_staff_id } = userDetails;
     if (
-      email.trim() !== "" &&
-      password.trim() !== "" &&
-      ((isStaff && consumer_or_staff_id?.trim() !== "") || !isStaff)
+      email.trim() !== '' &&
+      password.trim() !== '' &&
+      ((isStaff && consumer_or_staff_id?.trim() !== '') || !isStaff)
     ) {
       setIsLoginBtnActive(true);
     } else {
@@ -56,7 +54,7 @@ export default function LoginForm() {
     setIsLoginBtnActive(false);
     let data = { ...userDetails };
     if (!isStaff) {
-      data.consumer_or_staff_id = "";
+      data.consumer_or_staff_id = '';
     }
     let result = await authApi.getTokenKey(data);
 
@@ -71,56 +69,61 @@ export default function LoginForm() {
 
   return (
     <>
-      {isRedirectToDashboard && (
-        <OverlayLoading loadingText="Redirecting To Dashboard" />
-      )}
+      {isRedirectToDashboard && <OverlayLoading loadingText='Redirecting To Dashboard' />}
       <AuthPageSkeleton
-        title={`Login To ${isStaff === "staff" ? "Staff" : "Consumer"} Portal`}
-        callingUrl={isStaff === "staff" ? "staff-login" : "login"}
+        title={`Login To ${isStaff === 'staff' ? 'Staff' : 'Consumer'} Portal`}
+        callingUrl={isStaff === 'staff' ? 'staff-login' : 'login'}
       >
         <form onSubmit={handleFormSubmit}>
           <section>
-            <label className="block text-lg">Email</label>
+            <label className='block text-lg' htmlFor='email'>
+              Email
+            </label>
             <input
-              type="email"
-              name="email"
-              id="email"
-              className="form_input"
+              type='email'
+              name='email'
+              id='email'
+              className='form_input'
               value={userDetails.email}
               onChange={handleChange}
               required
             />
           </section>
-          <section className="mt-5">
-            <label className="block text-lg">Password</label>
-            <div className="relative">
+          <section className='mt-5'>
+            <label className='block text-lg' htmlFor='password'>
+              Password
+            </label>
+            <div className='relative'>
               <input
-                type={`${showPassword ? "text" : "password"}`}
-                name="password"
-                id="password"
-                className="form_input"
+                type={`${showPassword ? 'text' : 'password'}`}
+                name='password'
+                id='password'
+                className='form_input'
                 value={userDetails.password}
                 onChange={handleChange}
                 required
               />
               <Image
-                src={`/svg/eye${!showPassword ? "" : "-slash"}.svg`}
-                alt={`${!showPassword ? "show" : "hide"} password`}
-                className="absolute right-2 top-[43%] cursor-pointer"
+                data-testid={`password__${!showPassword ? 'hidden' : 'visible'}`}
+                src={`/svg/eye${!showPassword ? '' : '-slash'}.svg`}
+                alt={`${!showPassword ? 'show' : 'hide'} password`}
+                className='absolute right-2 top-[43%] cursor-pointer'
                 width={15}
                 height={15}
                 onClick={handleTogglePasswordVisibility}
               />
             </div>
           </section>
-          {isStaff === "staff" && (
-            <section className="mt-5">
-              <label className="block text-lg">Staff Id</label>
+          {isStaff === 'staff' && (
+            <section className='mt-5'>
+              <label className='block text-lg' htmlFor='consumer_or_staff_id'>
+                Staff Id
+              </label>
               <input
-                type="text"
-                name="consumer_or_staff_id"
-                id="consumer_or_staff_id"
-                className="form_input"
+                type='text'
+                name='consumer_or_staff_id'
+                id='consumer_or_staff_id'
+                className='form_input'
                 value={userDetails.consumer_or_staff_id}
                 onChange={handleChange}
                 required
@@ -128,10 +131,8 @@ export default function LoginForm() {
             </section>
           )}
           <button
-            type="submit"
-            className={`mt-7 global_button ${
-              isLoginBtnActive ? "active_button" : "inactive_button"
-            }`}
+            type='submit'
+            className={`mt-7 global_button ${isLoginBtnActive ? 'active_button' : 'inactive_button'}`}
           >
             Login
           </button>

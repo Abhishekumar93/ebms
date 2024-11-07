@@ -13,12 +13,18 @@ const renderComponent = (props = {}) => {
 
 describe('Loading component', () => {
   it('Should render with default loader text', () => {
-    const { getByText } = renderComponent();
-    expect(getByText('LOADING')).toBeInTheDocument();
+    const loadingText = 'LOADING';
+    const { getByTestId } = renderComponent();
+    const loadingDiv = getByTestId('loadingText');
+    expect(loadingDiv).toBeInTheDocument();
+    expect(loadingDiv.childElementCount).toBe(loadingText.length);
   });
 
   it('Should render with passed loader text', () => {
-    const { getByText } = renderComponent({ loadingText: 'Testing Loader' });
-    expect(getByText('Testing Loader')).toBeInTheDocument();
+    const loadingText = 'Testing Loader';
+    const { getByTestId } = renderComponent({ loadingText });
+    const loadingDiv = getByTestId('loadingText');
+    expect(loadingDiv).toBeInTheDocument();
+    expect(loadingDiv.childElementCount).toBe(loadingText.length);
   });
 });
